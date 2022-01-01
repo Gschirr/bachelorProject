@@ -32,4 +32,7 @@ requests.get('https://oauth.reddit.com/api/v1/me', headers=headers)
 
 res = requests.get("https://oauth.reddit.com/r/python/hot", headers=headers)
 
-print(res.json())
+# print(res.json())
+
+for post in res.json()['data']['children']:
+        print(post['data']['title'] + "\n")
