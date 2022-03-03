@@ -14,8 +14,8 @@ logCred = loginCredentialsConfig.Credentials
 reddit = praw.Reddit(
     client_id       = logCred.clientID,    #if fetched Author == walkingdistances this or the next one throws error
     client_secret   = logCred.secretToken,
-    # username        = logCred.username,
-    # password        = logCred.password,
+    username        = logCred.username,
+    password        = logCred.password,
     user_agent      = logCred.userAgent
 )
 
@@ -56,7 +56,7 @@ for index, row in dataFrameImportAuthors.iterrows():
 
     # Suspended/banned accounts will only return the name and is_suspended attributes.
 
-authorIds = dataFrameImportAuthors.get("author_Id")
+# authorIds = dataFrameImportAuthors.get("author_Id")
 
 
 
@@ -64,7 +64,7 @@ authorIds = dataFrameImportAuthors.get("author_Id")
 # for author in dataFrameImportAuthors["author_Id"]:
 for author in authorObjects:
     try:
-        if hasattr(author, "is_suspended"):
+        if hasattr(author, "is_suspended") or not hasattr(author, "comment_karma"):
             continue
         for comment in author.comments.new(limit=None):
             if comment.subreddit == "Android":
@@ -81,6 +81,12 @@ for author in authorObjects:
     except RedditAPIException as exception:
         for subexception in exception.items:
             print(subexception.error_type)
+
+    except BaseException as error:
+        dataFrameAuthorsWithPosts = pd.DataFrame(authorPlusPosts)
+        dataFrameAuthorsWithPosts.to_csv("authorsPlusPostsException.csv", encoding="utf-8")
+        print('An exception occurred: {}'.format(error))
+
 
 dataFrameAuthorsWithPosts = pd.DataFrame(authorPlusPosts)
 dataFrameAuthorsWithPosts.to_csv("authorsPlusPosts.csv", encoding="utf-8")
