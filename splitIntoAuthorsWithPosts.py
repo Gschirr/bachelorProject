@@ -48,7 +48,7 @@ for index, row in islice(dataFramePostsPOLISHED.iterrows(), 1, None):
         # if not, save array and start from step 1
         fileName = "authorDir\\" + currentAuthor + ".csv"
         authorDf = pd.DataFrame(authorArray)
-        authorDf.to_csv(fileName, encoding="utf-8")
+        authorDf.to_csv(fileName, encoding="utf-8", index=False)
 
         currentAuthor = row.T.get("author")
         authorArray.clear()
