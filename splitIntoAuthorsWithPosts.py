@@ -22,40 +22,40 @@ reddit = praw.Reddit(
 )
 
 # import prefetched authors from csv file
-# dataFramePosts = pd.read_csv("authorsPlusPosts.csv")
-# dataFramePosts = dataFramePosts.iloc[:, 1:]
-# dataFramePosts = dataFramePosts.drop(columns=["author_id"])
-#
-#
-# dataFramePosts.to_csv("dataFramePosts.csv", encoding="utf-8", index=False)
+dataFramePosts = pd.read_csv("authorsPlusPosts.csv")
+dataFramePosts = dataFramePosts.iloc[:, 1:]
+dataFramePosts = dataFramePosts.drop(columns=["author_id"])
 
-dataFramePostsPOLISHED = pd.read_csv("dataFramePosts.csv")
+#
+dataFramePosts.to_csv("dataFramePosts.csv", encoding="utf-8", index=False)
+
+# dataFramePostsPOLISHED = pd.read_csv("dataFramePosts.csv")
+#
+# # print("Breakpoint")
+#
+#
+# #
+# #  take author name into variable and save line to new array
+# authorArray = []
+# currentAuthor = dataFramePostsPOLISHED.loc[0].get("author")
+# authorArray.append(dataFramePostsPOLISHED.loc[0])
+# for index, row in islice(dataFramePostsPOLISHED.iterrows(), 1, None):
+#     if row.T.get("author") == currentAuthor:
+#         # check if next line author is same, if so take line into same array
+#         authorArray.append(row)
+#
+#     else:
+#         # if not, save array and start from step 1
+#         fileName = "authorDir\\" + currentAuthor + ".csv"
+#         authorDf = pd.DataFrame(authorArray)
+#         authorDf.to_csv(fileName, encoding="utf-8", index=False)
+#
+#         currentAuthor = row.T.get("author")
+#         authorArray.clear()
+#         authorArray.append(row)
+
+
+
+
 
 # print("Breakpoint")
-
-
-#
-#  take author name into variable and save line to new array
-authorArray = []
-currentAuthor = dataFramePostsPOLISHED.loc[0].get("author")
-authorArray.append(dataFramePostsPOLISHED.loc[0])
-for index, row in islice(dataFramePostsPOLISHED.iterrows(), 1, None):
-    if row.T.get("author") == currentAuthor:
-        # check if next line author is same, if so take line into same array
-        authorArray.append(row)
-
-    else:
-        # if not, save array and start from step 1
-        fileName = "authorDir\\" + currentAuthor + ".csv"
-        authorDf = pd.DataFrame(authorArray)
-        authorDf.to_csv(fileName, encoding="utf-8", index=False)
-
-        currentAuthor = row.T.get("author")
-        authorArray.clear()
-        authorArray.append(row)
-
-
-
-
-
-print("Breakpoint")
