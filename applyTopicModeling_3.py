@@ -7,23 +7,27 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
 
-# parameter constants that seem to deliver meaningful results
-FEATURE_LIST = [300, 600, 1200, 3000]
+# parameter constants that seem to deliver meaningful results (If not None, build a vocabulary that only consider the top
+# max_features ordered by term frequency across the corpus.) so, more == better
+FEATURE_LIST = [300, 600, 1200, 5000, 20000]
 COMPONENTS_LIST = [5, 10, 15, 20, 25]
-DATA_COLUMN_CONSTANT = 'comment'
 
 n_samples = None
 n_features = None
 n_components = None
 n_top_words = 12
 
+# import cleaned corpus, extract 'comment' column and shuffle list
 df = pd.read_csv('authorsPlusPosts_CLEANED.csv')
-dataList = df[DATA_COLUMN_CONSTANT].values.tolist()
+dataList = df['comment'].values.tolist()
 random.shuffle(dataList)
 
+# Set samples Parameter to use all elements from corpus
+n_samples = len(df['comment'])
 
 def plot_top_words(model, feature_names, n_top_words, title, modelName):
-    fig, axes = plt.subplots(5, 5, figsize=(30, 15), sharex=True)
+    # fig, axes = plt.subplots(5, 5, figsize=(30, 15), sharex=True)
+    fig, axes = plt.subplots(5, 5, figsize=(45, 25), sharex=True)
     axes = axes.flatten()
     for topic_idx, topic in enumerate(model.components_):
         top_features_ind = topic.argsort()[: -n_top_words - 1 : -1]
@@ -42,7 +46,8 @@ def plot_top_words(model, feature_names, n_top_words, title, modelName):
     plt.subplots_adjust(top=0.90, bottom=0.05, wspace=0.90, hspace=0.3)
 
     # Save plots to directory
-    fileName = modelName + "_numberOfFeature_" + str(n_features) + "_numberOfComponents_" + str(n_components) + "_numberOfTopWords_" + str(n_top_words)
+    # fileName = modelName + "_numberOfFeature_" + str(n_features) + "_numberOfComponents_" + str(n_components) + "_numberOfTopWords_" + str(n_top_words)
+    fileName = modelName + "_numberOfFeature_" + str("No_treshold") + "_numberOfComponents_" + str(n_components) + "_numberOfTopWords_" + str(n_top_words)
 
     if modelName == "lda":
         plt.savefig(r"Plots\lda\\" + fileName)
@@ -64,15 +69,13 @@ for feature in FEATURE_LIST:
         # set loop iteration component variable
         n_components = component
 
-        # Set samples Parameter to use all elements from corpus
-        n_samples = len(df['comment'])
         # take given number of samples from whole corpus (in this case all of them)
         data_samples = dataList[:n_samples]
 
         # NMF vectorize, fit and plot
         # Use tf-idf features for NMF.
         tfidf_vectorizer = TfidfVectorizer(
-            max_df=0.95, min_df=2, max_features=n_features, stop_words="english"
+            max_df=0.95, min_df=2, max_features=n_features
         )
         # tfidf = tfidf_vectorizer.fit_transform(df[DATA_COLUMN_CONSTANT].apply(lambda x: str(x)))
         tfidf = tfidf_vectorizer.fit_transform(data_samples)
@@ -80,8 +83,7 @@ for feature in FEATURE_LIST:
         nmf = NMF(
             n_components=n_components,
             random_state=1,
-            # beta_loss="kullback-leibler",
-            beta_loss="frobenius",
+            beta_loss="kullback-leibler",
             solver="mu",
             max_iter=1000,
             alpha=0.1,
@@ -93,7 +95,7 @@ for feature in FEATURE_LIST:
         # LDA vectorize, fit and plot
         # Use tf (raw term count) features for LDA.
         tf_vectorizer = CountVectorizer(
-            max_df=0.95, min_df=2, max_features=n_features, stop_words="english"
+            max_df=0.95, min_df=2, max_features=n_features
         )
         # tf = tf_vectorizer.fit_transform(df[DATA_COLUMN_CONSTANT].apply(lambda x: str(x)))
         tf = tf_vectorizer.fit_transform(data_samples)
@@ -107,5 +109,4 @@ for feature in FEATURE_LIST:
         lda.fit(tf)
         tf_feature_names = tf_vectorizer.get_feature_names_out()
         plot_top_words(lda, tf_feature_names, n_top_words, "Topics in LDA model", "lda")
-
         # https://scikit-learn.org/stable/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-plot-topics-extraction-with-nmf-lda-py
