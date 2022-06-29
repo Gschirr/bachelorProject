@@ -3,13 +3,19 @@ import re
 import nltk
 from nltk import WordNetLemmatizer
 from sklearn.feature_extraction import text
-wordnet_lemmatizer = WordNetLemmatizer()
 
+ADDITIONAL_STOP_WORDS = ['like', 'make', 'know', 'think', 'just', 'don\'t', 'want', 've', 'isn', 'able',
+                         'http', 'say', 'lot', 'try', 'sorry', 'removed', 'doesn\'t', 'didn\'t', 'i\'ve',
+                         'i\'ll', 'it\'ll', 'it\'s', 'i\'m', 'can\'t', 'won\'t', 'haven\'t', 'you\'re',
+                         'wouldn\'t', 'i\'d', 'that\'s', 'there\'s', 'wasn\'t', 'isn\'t', 'what\'s',
+                         'theyre', 'they\'re', 'use']
+
+wordnet_lemmatizer = WordNetLemmatizer()
 w_tokenizer = nltk.tokenize.WhitespaceTokenizer()
 lemmatizer = nltk.stem.WordNetLemmatizer()
 
-# Adding additional Words to the stopword list that seem to add noise to the results   //TODO  refactor additional words into enum file
-stop = list(text.ENGLISH_STOP_WORDS) + ['like', 'make', 'know', 'think', 'just', 'don\'t', 'want', 've', 'isn', 'able', 'http', 'say', 'lot', 'try', 'sorry', 'removed', 'doesn\'t', 'didn\'t', 'i\'ve', 'i\'ll', 'it\'ll', 'it\'s', 'i\'m', 'can\'t', 'won\'t', 'haven\'t', 'you\'re', 'wouldn\'t', 'i\'d', 'that\'s', 'there\'s', 'wasn\'t', 'isn\'t', 'what\'s', 'theyre', 'they\'re']
+# Adding additional Words to the stopword list that seem to add noise to the results
+stop = list(text.ENGLISH_STOP_WORDS) + ADDITIONAL_STOP_WORDS
 
 
 # Lemmatization Helper

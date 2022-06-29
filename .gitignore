@@ -1,3 +1,6 @@
 loginCredentialsConfig.py
 authorDir/*
-dataFramePosts.csv
+Plots/*
+dataFrameAuthors.csv
+authorsPlusPosts.csv
+authorsPlusPosts_CLEANED.csv
