@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
 
-# parameter constants that seem to deliver meaningful results (If not None, build a vocabulary that only consider the top
-# max_features ordered by term frequency across the corpus.) so, more == better
+# parameter constants that seem to deliver meaningful results
 FEATURE_LIST = [300, 600, 1200, 5000, 20000]
 COMPONENTS_LIST = [5, 10, 15, 20, 25]
 
@@ -46,9 +45,7 @@ def plot_top_words(model, feature_names, n_top_words, title, modelName):
     plt.subplots_adjust(top=0.90, bottom=0.05, wspace=0.90, hspace=0.3)
 
     # Save plots to directory
-    # fileName = modelName + "_numberOfFeature_" + str(n_features) + "_numberOfComponents_" + str(n_components) + "_numberOfTopWords_" + str(n_top_words)
-    fileName = modelName + "_numberOfFeature_" + str("No_treshold") + "_numberOfComponents_" + str(n_components) + "_numberOfTopWords_" + str(n_top_words)
-
+    fileName = modelName + "_numberOfFeature_" + str(n_features) + "_numberOfComponents_" + str(n_components) + "_numberOfTopWords_" + str(n_top_words)
     if modelName == "lda":
         plt.savefig(r"Plots\lda\\" + fileName)
     elif modelName == "nmf":
@@ -73,13 +70,11 @@ for feature in FEATURE_LIST:
         data_samples = dataList[:n_samples]
 
         # NMF vectorize, fit and plot
-        # Use tf-idf features for NMF.
+        # use tf-idf features for NMF.
         tfidf_vectorizer = TfidfVectorizer(
             max_df=0.95, min_df=2, max_features=n_features
         )
-        # tfidf = tfidf_vectorizer.fit_transform(df[DATA_COLUMN_CONSTANT].apply(lambda x: str(x)))
         tfidf = tfidf_vectorizer.fit_transform(data_samples)
-        # tfidf = tfidf_vectorizer.fit_transform(data_samples.apply(lambda x: str(x)))
         nmf = NMF(
             n_components=n_components,
             random_state=1,
@@ -93,11 +88,10 @@ for feature in FEATURE_LIST:
         plot_top_words(nmf, tfidf_feature_names, n_top_words, "Topics in NMF model", "nmf")
 
         # LDA vectorize, fit and plot
-        # Use tf (raw term count) features for LDA.
+        # use tf (raw term count) features for LDA.
         tf_vectorizer = CountVectorizer(
             max_df=0.95, min_df=2, max_features=n_features
         )
-        # tf = tf_vectorizer.fit_transform(df[DATA_COLUMN_CONSTANT].apply(lambda x: str(x)))
         tf = tf_vectorizer.fit_transform(data_samples)
         lda = LatentDirichletAllocation(
             n_components=n_components,
@@ -109,4 +103,3 @@ for feature in FEATURE_LIST:
         lda.fit(tf)
         tf_feature_names = tf_vectorizer.get_feature_names_out()
         plot_top_words(lda, tf_feature_names, n_top_words, "Topics in LDA model", "lda")
-        # https://scikit-learn.org/stable/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-plot-topics-extraction-with-nmf-lda-py
