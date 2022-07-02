@@ -33,7 +33,7 @@ def remove_ShortSentences(text):
         return text
 
 # https://towardsdatascience.com/end-to-end-topic-modeling-in-python-latent-dirichlet-allocation-lda-35ce4ed6b3e0
-corpus = pd.read_csv("authorsPlusPosts.csv")
+corpus = pd.read_csv("../authorsPlusPosts.csv")
 
 # rename column 'subredditToPost' to 'comment'
 corpus.rename(columns={'subredditToPost':'comment'}, inplace=True)

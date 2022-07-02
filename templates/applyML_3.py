@@ -60,7 +60,7 @@ for feature in FEATURE_LIST:
         print("Loading dataset...")
         t0 = time()
 
-        df = pd.read_csv('authorsPlusPosts_CLEANED.csv')
+        df = pd.read_csv('../authorsPlusPosts_CLEANED.csv')
         dataList = df[DATA_COLUMN_CONSTANT].values.tolist()
         random.shuffle(dataList)
 
