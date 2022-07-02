@@ -1,6 +1,7 @@
 loginCredentialsConfig.py
 authorDir/*
 Plots/*
+templates/*
 dataFrameAuthors.csv
 authorsPlusPosts.csv
 authorsPlusPosts_CLEANED.csv
