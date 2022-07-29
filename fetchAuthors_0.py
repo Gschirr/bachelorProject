@@ -1,20 +1,10 @@
 import pandas as pd
-import time
 import praw
-from psaw import PushshiftAPI
-from datetime import datetime
-from datetime import date
-
-
-# to use PSAW
 import loginCredentialsConfig
 
-api = PushshiftAPI()
-# to use PRAW
 
-
-# Initialization of the PRAW Reddit API Wrapper with Credentials from the Created Reddit Account
-# Credentials are hidden within a config file to 1. avoid hardcoding them, 2. for Privacy reasons
+# initialization of the PRAW Reddit API Wrapper with Credentials from the Created Reddit Account
+# credentials are hidden within a config file to 1. avoid hardcoding them, 2. for privacy reasons
 logCred = loginCredentialsConfig.Credentials
 # create praw instance
 reddit = praw.Reddit(
@@ -34,15 +24,12 @@ dataSetAuthors = {
     "author_Id": [],
     "author": []
 }
-
-
-
 commentsList = []
-# outer loop fetches all the submissions (alle Haupt-Posts)
-start_time = time.time()
-# Fetch from "Hot" Sorting because this has more userengagement
+
+# outer loop fetches all the submissions
+# Fetch from "Hot" Sorting because this has more user-engagement
 for submission in subreddit.hot(limit=1000):
-    # Ignore pinned or stickied Posts, da diese eher Mod oder Infoposts sind
+    # Ignore pinned or stickied Posts, because those are almost exclusively used for moderation purposes
     if submission.pinned == True or submission.stickied == True:
         continue
 
@@ -68,13 +55,4 @@ for submission in subreddit.hot(limit=1000):
 dataFrameAuthors = pd.DataFrame(dataSetAuthors)
 dataFrameAuthors.drop_duplicates()
 
-# fetched 04_06
 dataFrameAuthors.to_csv("dataFrameAuthors.csv", encoding="utf-8")
-
-now = datetime.now()
-today = date.today()
-
-current_time = now.strftime("%H:%M:%S")
-print("Fetch ended at Current Time =", current_time)
-
-print("On the: ", today)

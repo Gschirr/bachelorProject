@@ -1,8 +1,10 @@
-import pandas as pd
-from time import time
+# https://towardsdatascience.com/end-to-end-topic-modeling-in-python-latent-dirichlet-allocation-lda-35ce4ed6b3e0
 import re
 import nltk
+import pandas as pd
+from time import time
 from sklearn.feature_extraction import text
+
 
 ADDITIONAL_STOP_WORDS = ['like', 'make', 'know', 'think', 'just', 'don\'t', 'want', 've', 'isn', 'able',
                          'http', 'say', 'lot', 'try', 'sorry', 'removed', 'doesn\'t', 'didn\'t', 'i\'ve',
@@ -30,7 +32,6 @@ def remove_ShortSentences(text):
     else:
         return text
 
-# https://towardsdatascience.com/end-to-end-topic-modeling-in-python-latent-dirichlet-allocation-lda-35ce4ed6b3e0
 corpus = pd.read_csv("authorsPlusPosts.csv")
 
 # rename column 'subredditToPost' to 'comment'

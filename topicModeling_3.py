@@ -1,11 +1,11 @@
-from time import sleep
+# https://scikit-learn.org/stable/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html
 import random
-
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from time import sleep
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
+
 
 # parameter constants that seem to deliver meaningful results
 FEATURE_LIST = [300, 600, 1200, 5000, 20000]
@@ -21,7 +21,7 @@ df = pd.read_csv('authorsPlusPosts_CLEANED.csv')
 dataList = df['comment'].values.tolist()
 random.shuffle(dataList)
 
-# Set samples Parameter to use all elements from corpus
+# det samples Parameter to use all elements from corpus
 n_samples = len(df['comment'])
 
 def plot_top_words(model, feature_names, n_top_words, title, modelName):
@@ -52,6 +52,7 @@ def plot_top_words(model, feature_names, n_top_words, title, modelName):
         plt.savefig(r"Plots\nmf\\" + fileName)
     else:
         plt.savefig(r"Plots\\" + fileName)
+    # sleep is necessary because my machine runs the calculations faster than it can persist the plots
     sleep(5)
     plt.close()
 
